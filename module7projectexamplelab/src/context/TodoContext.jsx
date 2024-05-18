@@ -1,25 +1,14 @@
-import React, { useState, useContext, useReducer } from "react";
-
+import React, { useState, useContext, useReducer, useEffect } from "react";
+import axios from "axios";
 const reducer = (state, action) => {
   switch (action.type) {
+    case "initTodos":
+      return action.payload;
     case "addTodo":
-      let index = 1;
-      if (state.length > 0) {
-        index = Math.max(...state.map((todo) => todo.id)) + 1;
-      }
-      return [...state, { ...action.payload, id: index }];
+      return [action.payload];
 
     case "updateTodo":
-      const tempTodo = action.payload;
-      const foundIndex = [...state].indexOf((todo) => todo.id === tempTodo.id);
-      const copyState = [...state];
-      copyState.splice(foundIndex, 1, tempTodo);
-      return copyState;
-
-    case "deleteTodo":
-      const deleteTodos = action.payload;
-
-      return;
+      return [action.payload];
 
     default:
       return state;
@@ -31,6 +20,11 @@ const TodoContext = React.createContext();
 export const TodoProvider = (props) => {
   // store the current user in state at the top level
   const [todos, todoDispatch] = useReducer(reducer, []);
+  useEffect(() => {
+    axios.get("http://localhost:3000/todos").then((response) => {
+      todoDispatch({ type: "initTodos", payload: response.data });
+    });
+  }, []);
 
   return (
     <TodoContext.Provider value={{ todos, todoDispatch }}>
