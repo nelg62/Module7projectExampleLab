@@ -8,7 +8,15 @@ const reducer = (state, action) => {
       return [action.payload];
 
     case "updateTodo":
-      return [action.payload];
+      return state.map((todo) =>
+        todo.id === action.payload.id ? action.payload : todo
+      );
+
+    case "deleteTodo":
+      console.log("state", state);
+      console.log("...state", ...state);
+      console.log("actionpayload", action.payload);
+      return state.filter((todo) => todo.id !== action.payload);
 
     default:
       return state;

@@ -1,21 +1,20 @@
 import { useState } from "react";
 import axios from "axios";
 import { useToDoContext } from "../context/TodoContext";
+
 function UpdateTodoCard({ todo, onCancel }) {
   const [updatedTodo, setTodo] = useState(todo);
   const { todoDispatch } = useToDoContext();
   const sumbit = async (e) => {
     e.preventDefault();
 
-    // const response = await axios.get(
-    //   "http://localhost:3000/todos",
-    //   updatedTodo
-    // );
-    // console.log("updatedTodo", response);
-    // todoDispatch({ type: "updateTodo", payload: updatedTodo });
+    const response = await axios.put(
+      "http://localhost:3000/updatetodos",
+      updatedTodo
+    );
+    console.log("updatedTodo", response);
 
-    // console.log("updatedTodo", updatedTodo);
-    // todoDispatch({ type: "updateTodo", payload: updatedTodo });
+    todoDispatch({ type: "updateTodo", payload: updatedTodo });
     onCancel(false);
   };
   const updateTodoClick = (newTodo) => {

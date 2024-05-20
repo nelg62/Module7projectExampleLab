@@ -1,16 +1,20 @@
 import { useState } from "react";
 import axios from "axios";
 import { useToDoContext } from "../context/TodoContext";
-function NewTodoForm({ addTodo }) {
-  const { todos, todoDispatch } = useToDoContext();
+function NewTodoForm() {
+  const { todoDispatch } = useToDoContext();
   const [todo, setTodo] = useState({ title: "zcvhjzclvhzklcxvhjzxcvs" });
 
   const sumbit = async (e) => {
     e.preventDefault();
-    const response = await axios.post("http://localhost:3000/todos", todo);
-    console.log("responseTodo", response);
-    todoDispatch({ type: "addTodo", payload: response.data });
-    setTodo({ title: "" });
+    try {
+      const response = await axios.post("http://localhost:3000/todos", todo);
+      console.log("responseTodo", response);
+      todoDispatch({ type: "addTodo", payload: response.data });
+      setTodo({ title: "" });
+    } catch (error) {
+      console.error("Error adding Todo", error);
+    }
   };
 
   const updateTodo = (newTodo) => {
